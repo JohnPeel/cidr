@@ -1,0 +1,40 @@
+name: Rust
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    continue-on-error: true
+    strategy:
+      matrix:
+        rust:
+          - stable
+        os:
+          - ubuntu-latest
+          - windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: ${{ matrix.rust }}
+        override: true
+    - uses: actions-rs/cargo@v1
+      with:
+        command: build
+        args: --release
+    - run: |
+        mkdir dist/
+        mv "target/release/cidr" "dist/cidr-${{ matrix.os }}"
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.os }}
+        path: dist/*
