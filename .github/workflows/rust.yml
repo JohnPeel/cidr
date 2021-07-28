@@ -20,6 +20,13 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
+        include:
+          - os: ubuntu-latest
+            os_name: linux
+            ext: ''
+          - os: windows-latest
+            os_name: windows
+            ext: '.exe'
     steps:
     - uses: actions/checkout@v2
     - uses: actions-rs/toolchain@v1
@@ -33,8 +40,8 @@ jobs:
         args: --release
     - run: |
         mkdir dist/
-        mv "target/release/cidr" "dist/cidr-${{ matrix.os }}"
+        mv "target/release/cidr${{ matrix.ext }}" "dist/cidr-${{ matrix.os_name }}${{ matrix.ext }}"
     - uses: actions/upload-artifact@v2
       with:
-        name: ${{ matrix.os }}
+        name: ${{ matrix.os_name }}
         path: dist/*
