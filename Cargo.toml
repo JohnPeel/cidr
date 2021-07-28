@@ -1,0 +1,10 @@
+[package]
+name = "cidr"
+version = "0.1.0"
+authors = ["John Peel <john@dgby.org>"]
+license = "MIT"
+edition = "2018"
+
+[dependencies]
+clap = "2.33.3"
+ipnet = "2.3.1"
